@@ -1,0 +1,51 @@
+<!DOCTYPE html><html>  
+    <head>    
+        <meta charset="utf-8">    
+        <title>Meeting Timer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <script>
+        //Get current time to set as reference point
+        var startpoint = new Date().getTime();
+
+        //The start point of the timer (in milliseconds)
+        var offset = 51000;
+
+        // Update count down each second
+        var x = setInterval(function() 
+        {
+        // Update date and time to reference against original time
+        var now = new Date().getTime();
+
+        // Find the distance between now and reference date, adding in offset to count down from
+        var distance = (startpoint + offset) - now;
+
+        // Calculate hours, minutes and seconds
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result to screen
+        document.getElementById("counter").innerHTML = hours + ":"
+        + minutes + ":" + seconds;
+
+        // Notify user if countdown complete
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("counter").innerHTML = "COMPLETED";
+        }
+        }, 1000);
+        </script>
+    </head>
+
+  <body>
+    <h1>Meeting timer</h1>
+    <p id="counter"></p>
+    <div class="center_div">
+      <form>
+        <input Id="nameEntry" type="text" name="user" placeholder="Start time">
+        <button type="submit">Start</button>
+      </form>
+    </div>
+  </body>
+</html>
