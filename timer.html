@@ -7,6 +7,8 @@
         <script>
 
           var timerInterval = setInterval(null, 0);
+          var savedTime = 0;
+          var originalTime = 0;
           var currentTime = 0;
 
           //Initate the start time of the timer
@@ -49,20 +51,29 @@
             //Initate countdown function from specified time
             if(totalOffset > 0)
             {
-            currentTime = totalOffset;
+            originalTime = totalOffset;
 
             timerInterval = setInterval(function() {countDown(totalOffset, startpoint)}, 100);
             }
             else //Initiate countdown function from last set time if no time is specified
-              timerInterval = setInterval(function() {countDown(currentTime, startpoint)}, 100);
+              timerInterval = setInterval(function() {countDown(savedTime, startpoint)}, 100);
+          }
+
+          function pauseCountdown()
+          {
+            clearInterval(timerInterval);
+
+            savedTime = currentTime;
           }
 
           function resetCountdown()
           {
             clearInterval(timerInterval);
 
+            savedTime = originalTime;
+
             var startpoint = new Date().getTime();
-            countDown(currentTime, startpoint);
+            countDown(originalTime, startpoint);
           }
 
           // Update count down each second
@@ -73,6 +84,8 @@
             
             // Find the distance between now and reference date, adding in offset to count down from
             var distance = ((startpoint + offset) - now);
+
+            currentTime = distance;
 
             // Calculate hours, minutes and seconds
             var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -103,6 +116,7 @@
         <input id="minutesInput" type="number" placeholder="Minutes">
         <input id="secondsInput" type="number" placeholder="Seconds">
         <button type="button" onclick="initiateCountdown()">Start</button>
+        <button type="button" onclick="pauseCountdown()">Pause</button>
         <button type="button" onclick="resetCountdown()">Reset</button>
       </form>
     </div>
