@@ -8,11 +8,35 @@
 
   <script>
 
+    class subTask {
+      constructor(name, hours, minutes, seconds){
+        this.name = name;
+        this.hours = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
+      }
+
+      returnName() {
+        return this.name;
+      }
+
+      returnHours() {
+        return this.hours;
+      }
+
+      returnMinutes() {
+        return this.minutes;
+      }
+
+      returnSeconds() {
+        return this.seconds;
+      }
+    }
+
     var timerInterval = setInterval(null, 0);
     var savedTime = 0;
     var originalTime = 0;
     var currentTime = 0;
-    const tasks = [];
 
     //Initate the start time of the timer
     function initiateCountdown() {
@@ -101,19 +125,19 @@
       }
     }
 
-    function addTask() {
+    function createSubTask() {
       
     }
 
-    function importTask() {
+    function importSubTask() {
 
     }
 
-    function exportTask() {
+    function exportSubTask() {
 
     }
 
-    function pauseTask() {
+    function pauseSubTask() {
 
     }
 
@@ -135,7 +159,7 @@
   </div>
   <div class="center_div">
     <form>
-      <button type="button" onclick="addTask()">Add Task</button>
+      <button type="button" onclick="createSubTask()">Add Task</button>
     </form>
   </div>
   <div class="center_div">
