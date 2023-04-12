@@ -37,6 +37,10 @@
     var savedTime = 0;
     var originalTime = 0;
     var currentTime = 0;
+<<<<<<< HEAD
+=======
+    var numSubTasks = 0;
+>>>>>>> 60a54a3a1ead9d63c41bf72bbb366e54fcf13cca
 
     //Initate the start time of the timer
     function initiateCountdown() {
@@ -47,37 +51,24 @@
       var startpoint = new Date().getTime();
 
       //Get time to set to from input
-      var hoursInput = document.getElementById("hoursInput");
       var minutesInput = document.getElementById("minutesInput");
-      var secondsInput = document.getElementById("secondsInput");
 
-      if (hoursInput.value != "")
-        hOffset = hoursInput.value;
-      else
-        hOffset = '0';
 
       if (minutesInput.value != "")
         mOffset = minutesInput.value;
       else
         mOffset = '0';
 
-      if (secondsInput.value != "")
-        sOffset = secondsInput.value;
-      else
-        sOffset = '0';
-
       //Clear textboxes on screen
-      hoursInput.value = "";
       minutesInput.value = "";
-      secondsInput.value = "";
 
       //Calculate total time based of hours minutes and seconds 
-      var totalOffset = JSON.parse(hOffset) * 3600000 + JSON.parse(mOffset) * 60000 + JSON.parse(sOffset) * 1000;
+      var totalOffset = JSON.parse(mOffset) * 60000;
 
       //Initate countdown function from specified time
       if (totalOffset > 0) {
         originalTime = totalOffset;
-
+        savedTime = totalOffset;
         timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
       }
       else //Initiate countdown function from last set time if no time is specified
@@ -125,8 +116,39 @@
       }
     }
 
+<<<<<<< HEAD
     function createSubTask() {
+=======
+    function addTask()
+    {
+      numSubTasks++;
+            
+      // Retrieve the container tot add sub-tasks to
+      var tasksContainer = document.getElementById("tasksContainer");
+
+      // Append a node with a random text
+      tasksContainer.appendChild(document.createTextNode("Sub task " + (numSubTasks) + " "));
+>>>>>>> 60a54a3a1ead9d63c41bf72bbb366e54fcf13cca
       
+      // Create two input elements
+      var taskNameInput = document.createElement("input");
+      var mInput = document.createElement("input");
+
+      //Set type, placeholder and id of taskNameInput
+      taskNameInput.type = "Text";
+      taskNameInput.placeholder = "Task name";
+      taskNameInput.id = "taskName" + numSubTasks-1;
+
+      //Set type, placeholder and id of timer
+      mInput.type = "number";
+      mInput.id = "taskTime" + numSubTasks-1;
+      mInput.placeholder = "Minutes";
+
+      tasksContainer.appendChild(taskNameInput);
+      tasksContainer.appendChild(mInput);
+      
+      // Append a line break 
+      tasksContainer.appendChild(document.createElement("br")); 
     }
 
     function importSubTask() {
@@ -149,9 +171,8 @@
   <p id="counter"></p>
   <div class="center_div">
     <form>
-      <input id="hoursInput" type="number" placeholder="Hours">
+      <input id="taskName" type="text" placeholder="Task Name">
       <input id="minutesInput" type="number" placeholder="Minutes">
-      <input id="secondsInput" type="number" placeholder="Seconds">
       <button type="button" onclick="initiateCountdown()">Start</button>
       <button type="button" onclick="pauseCountdown()">Pause</button>
       <button type="button" onclick="resetCountdown()">Reset</button>
@@ -162,7 +183,7 @@
       <button type="button" onclick="createSubTask()">Add Task</button>
     </form>
   </div>
-  <div class="center_div">
+  <div id="tasksContainer" class="center_div">
     <form>
       
     </form>
