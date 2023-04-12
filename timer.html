@@ -40,27 +40,32 @@
     var numSubTasks = 0;
 
     //Initate the start time of the timer
-    function initiateCountdown() {
+    function initiateCountdown() 
+    {
+      var totalOffset = 0;
+      var mOffset = 0;
       //Clear previously running timer
       clearInterval(timerInterval);
 
       //Get current time to set as reference point
       var startpoint = new Date().getTime();
 
-      //Get time to set to from input
-      var minutesInput = document.getElementById("minutesInput");
+      for(var i=0; i<numSubTasks; i++)
+      {
+        //Get time to set to from input
+        var minutesInput = document.getElementById("taskTime" + i.toString(10));
 
-
-      if (minutesInput.value != "")
+        if (minutesInput.value != "")
         mOffset = minutesInput.value;
       else
         mOffset = '0';
 
-      //Clear textboxes on screen
-      minutesInput.value = "";
+        //Clear textboxes on screen
+        minutesInput.value = "";
 
-      //Calculate total time based of hours minutes and seconds 
-      var totalOffset = JSON.parse(mOffset) * 60000;
+        //Calculate total time based of hours minutes and seconds 
+        var totalOffset = totalOffset + JSON.parse(mOffset) * 60000;
+      }
 
       //Initate countdown function from specified time
       if (totalOffset > 0) {
@@ -130,12 +135,12 @@
       //Set type, placeholder and id of taskNameInput
       taskNameInput.type = "Text";
       taskNameInput.placeholder = "Task name";
-      taskNameInput.id = "taskName" + numSubTasks-1;
+      taskNameInput.id = "taskName" + (numSubTasks.toString(10)-1);
 
       //Set type, placeholder and id of timer
       mInput.type = "number";
-      mInput.id = "taskTime" + numSubTasks-1;
       mInput.placeholder = "Minutes";
+      mInput.id = "taskTime" + (numSubTasks.toString(10)-1);
 
       tasksContainer.appendChild(taskNameInput);
       tasksContainer.appendChild(mInput);
@@ -162,23 +167,14 @@
 <body>
   <h1>Meeting timer</h1>
   <p id="counter"></p>
+  <div id="tasksContainer" class="center_div"></div>
+    <button type="button" onclick="addTask()">Add Task</button>
+  </div>
   <div class="center_div">
     <form>
-      <input id="taskName" type="text" placeholder="Task Name">
-      <input id="minutesInput" type="number" placeholder="Minutes">
       <button type="button" onclick="initiateCountdown()">Start</button>
       <button type="button" onclick="pauseCountdown()">Pause</button>
       <button type="button" onclick="resetCountdown()">Reset</button>
-    </form>
-  </div>
-  <div class="center_div">
-    <form>
-      <button type="button" onclick="createSubTask()">Add Task</button>
-    </form>
-  </div>
-  <div id="tasksContainer" class="center_div">
-    <form>
-      
     </form>
   </div>
 </body>
