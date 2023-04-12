@@ -1,124 +1,148 @@
-<!DOCTYPE html><html>  
-    <head>    
-        <meta charset="utf-8">    
-        <title>Meeting Timer</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!DOCTYPE html>
+<html>
 
-        <script>
+<head>
+  <meta charset="utf-8">
+  <title>Meeting Timer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-          var timerInterval = setInterval(null, 0);
-          var savedTime = 0;
-          var originalTime = 0;
-          var currentTime = 0;
+  <script>
 
-          //Initate the start time of the timer
-          function initiateCountdown()
-          {
-            //Clear previously running timer
-            clearInterval(timerInterval);
+    var timerInterval = setInterval(null, 0);
+    var savedTime = 0;
+    var originalTime = 0;
+    var currentTime = 0;
+    const tasks = [];
 
-            //Get current time to set as reference point
-            var startpoint = new Date().getTime();
+    //Initate the start time of the timer
+    function initiateCountdown() {
+      //Clear previously running timer
+      clearInterval(timerInterval);
 
-            //Get time to set to from input
-            var hoursInput = document.getElementById("hoursInput");
-            var minutesInput = document.getElementById("minutesInput");
-            var secondsInput = document.getElementById("secondsInput");
+      //Get current time to set as reference point
+      var startpoint = new Date().getTime();
 
-            if(hoursInput.value != "")
-              hOffset = hoursInput.value;
-            else
-              hOffset = '0';
+      //Get time to set to from input
+      var hoursInput = document.getElementById("hoursInput");
+      var minutesInput = document.getElementById("minutesInput");
+      var secondsInput = document.getElementById("secondsInput");
 
-              if(minutesInput.value != "")
-              mOffset = minutesInput.value;
-            else
-              mOffset = '0';
+      if (hoursInput.value != "")
+        hOffset = hoursInput.value;
+      else
+        hOffset = '0';
 
-              if(secondsInput.value != "")
-              sOffset = secondsInput.value;
-            else
-              sOffset = '0';
+      if (minutesInput.value != "")
+        mOffset = minutesInput.value;
+      else
+        mOffset = '0';
 
-              //Clear textboxes on screen
-              hoursInput.value = "";
-              minutesInput.value = "";
-              secondsInput.value = "";
-            
-            //Calculate total time based of hours minutes and seconds 
-            var totalOffset = JSON.parse(hOffset)*3600000 + JSON.parse(mOffset)*60000 + JSON.parse(sOffset)*1000;
-            
-            //Initate countdown function from specified time
-            if(totalOffset > 0)
-            {
-            originalTime = totalOffset;
+      if (secondsInput.value != "")
+        sOffset = secondsInput.value;
+      else
+        sOffset = '0';
 
-            timerInterval = setInterval(function() {countDown(totalOffset, startpoint)}, 100);
-            }
-            else //Initiate countdown function from last set time if no time is specified
-              timerInterval = setInterval(function() {countDown(savedTime, startpoint)}, 100);
-          }
+      //Clear textboxes on screen
+      hoursInput.value = "";
+      minutesInput.value = "";
+      secondsInput.value = "";
 
-          function pauseCountdown()
-          {
-            clearInterval(timerInterval);
+      //Calculate total time based of hours minutes and seconds 
+      var totalOffset = JSON.parse(hOffset) * 3600000 + JSON.parse(mOffset) * 60000 + JSON.parse(sOffset) * 1000;
 
-            savedTime = currentTime;
-          }
+      //Initate countdown function from specified time
+      if (totalOffset > 0) {
+        originalTime = totalOffset;
 
-          function resetCountdown()
-          {
-            clearInterval(timerInterval);
+        timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
+      }
+      else //Initiate countdown function from last set time if no time is specified
+        timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
+    }
 
-            savedTime = originalTime;
+    function pauseCountdown() {
+      clearInterval(timerInterval);
 
-            var startpoint = new Date().getTime();
-            countDown(originalTime, startpoint);
-          }
+      savedTime = currentTime;
+    }
 
-          // Update count down each second
-          function countDown(offset, startpoint) 
-          {
-          // Update date and time to reference against original time
-          var now = new Date().getTime();
-            
-            // Find the distance between now and reference date, adding in offset to count down from
-            var distance = ((startpoint + offset) - now);
+    function resetCountdown() {
+      clearInterval(timerInterval);
 
-            currentTime = distance;
+      savedTime = originalTime;
 
-            // Calculate hours, minutes and seconds
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      var startpoint = new Date().getTime();
+      countDown(originalTime, startpoint);
+    }
 
-          // Display the result to screen
-          document.getElementById("counter").innerHTML = hours + ":"
-          + minutes + ":" + seconds;
+    // Update count down each second
+    function countDown(offset, startpoint) {
+      // Update date and time to reference against original time
+      var now = new Date().getTime();
 
-          // Notify user if countdown complete
-            if (distance < 0) 
-            {
-                clearInterval(timerInterval);
-                document.getElementById("counter").innerHTML = "COMPLETED";
-            }
-          }
+      // Find the distance between now and reference date, adding in offset to count down from
+      var distance = ((startpoint + offset) - now);
 
-        </script>
-    </head>
+      currentTime = distance;
 
-  <body>
-    <h1>Meeting timer</h1>
-    <p id="counter"></p>
-    <div class="center_div">
-      <form>
-        <input id="hoursInput" type="number" placeholder="Hours">
-        <input id="minutesInput" type="number" placeholder="Minutes">
-        <input id="secondsInput" type="number" placeholder="Seconds">
-        <button type="button" onclick="initiateCountdown()">Start</button>
-        <button type="button" onclick="pauseCountdown()">Pause</button>
-        <button type="button" onclick="resetCountdown()">Reset</button>
-      </form>
-    </div>
-  </body>
+      // Calculate hours, minutes and seconds
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Display the result to screen
+      document.getElementById("counter").innerHTML = hours + ":"
+        + minutes + ":" + seconds;
+
+      // Notify user if countdown complete
+      if (distance < 0) {
+        clearInterval(timerInterval);
+        document.getElementById("counter").innerHTML = "COMPLETED";
+      }
+    }
+
+    function addTask() {
+      
+    }
+
+    function importTask() {
+
+    }
+
+    function exportTask() {
+
+    }
+
+    function pauseTask() {
+
+    }
+
+  </script>
+</head>
+
+<body>
+  <h1>Meeting timer</h1>
+  <p id="counter"></p>
+  <div class="center_div">
+    <form>
+      <input id="hoursInput" type="number" placeholder="Hours">
+      <input id="minutesInput" type="number" placeholder="Minutes">
+      <input id="secondsInput" type="number" placeholder="Seconds">
+      <button type="button" onclick="initiateCountdown()">Start</button>
+      <button type="button" onclick="pauseCountdown()">Pause</button>
+      <button type="button" onclick="resetCountdown()">Reset</button>
+    </form>
+  </div>
+  <div class="center_div">
+    <form>
+      <button type="button" onclick="addTask()">Add Task</button>
+    </form>
+  </div>
+  <div class="center_div">
+    <form>
+      
+    </form>
+  </div>
+</body>
+
 </html>
