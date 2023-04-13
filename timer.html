@@ -152,7 +152,7 @@
       }
     }
 
-    function addTask()
+    function addTask(name, time)
     {
       numSubTasks++;
             
@@ -164,30 +164,77 @@
       var taskNameInput = document.createElement("input");
       var mInput = document.createElement("input");
 
+      //set id of linebreak
+      lineBreak.id = "break"+ (numSubTasks.toString(10)-1);
+
       //Set type, placeholder and id of taskNameInput
       taskNameInput.type = "Text";
       taskNameInput.placeholder = "Task name";
       taskNameInput.id = "taskName" + (numSubTasks.toString(10)-1);
+      taskNameInput.value = name;
 
       //Set type, placeholder and id of timer
       mInput.type = "number";
       mInput.placeholder = "Minutes";
       mInput.id = "taskTime" + (numSubTasks.toString(10)-1);
+      mInput.value = time;
 
       tasksContainer.appendChild(lineBreak);
       tasksContainer.appendChild(taskNameInput);
       tasksContainer.appendChild(mInput);
     }
 
+    //import subtasks from a csv file
     function importSubTask(csvFile) 
     {
+      //Remove all previously added tasks
+      for(var i=0; i<numSubTasks; i++)
+      {
+        currentTaskName = document.getElementById("taskName" + i);
+        currentTaskTime = document.getElementById("taskTime" + i);
+        lineBreak = document.getElementById("break" + i);
+        
+        if(currentTaskName != null)
+        currentTaskName.remove();
+
+        if(currentTaskTime != null)
+        currentTaskTime.remove();
+        
+        if(lineBreak != null)
+        lineBreak.remove();
+
+        //Update subtasks counter
+        numSubTasks--;
+      }
+
+      //Read data in csv file
     let file = csvFile.files[0];
     var reader = new FileReader();
     reader.readAsText(file);
-    reader.onload = function() 
-    
+
+    reader.onload = function(event) 
     {
-      console.log(reader.result);
+      var taskData = event.target.result;
+
+      //Split data by each line
+      var dataByRow = taskData.split('\n');
+
+      //Split data in each line by commas
+      for(var r=1; r<dataByRow.length-1; r++)
+      {
+        console.log(dataByRow);
+        var taskDetails = dataByRow[r].split(',');
+
+        //Catch error if an empty time is given
+        try{
+          addTask(taskDetails[0], JSON.parse(taskDetails[1]));
+        }
+        catch(syntaxError){
+          numSubTasks--;
+          console.log("CAUGHT: Empty line in CSV");
+          addTask(taskDetails[0], 0);
+        }
+      }
     }
     }
 
@@ -206,14 +253,14 @@
 
 <body>
   <h1>Meeting timer</h1>
-  <p id="counter"></p>
-  <p id="taskName"></p>
+  <p id="counter">00:00:00</p>
+  <p id="taskName">No task</p>
   <div id="tasksContainer" class="center_div">
     <input type="text" placeholder="Task name" id="taskName0">
     <input type="number" placeholder="Minutes" id="taskTime0">
 
   </div>
-    <button type="button" onclick="addTask()">Add Task</button>
+    <button type="button" onclick="addTask('', 0)">Add Task</button>
   </div>
   <div class="center_div">
     <form>
