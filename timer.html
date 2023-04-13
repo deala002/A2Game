@@ -130,7 +130,7 @@
       if(elapsedTime > taskTimes[currentTask])
       {
         currentTask++;
-        taskText = document.getElementById("taskName"); 
+        var taskText = document.getElementById("taskName"); 
         taskText.innerHTML = taskNames[currentTask];
       }
 
@@ -160,6 +160,7 @@
       var tasksContainer = document.getElementById("tasksContainer");
       
       // Create two input elements
+      var lineBreak = document.createElement("br");
       var taskNameInput = document.createElement("input");
       var mInput = document.createElement("input");
 
@@ -173,11 +174,9 @@
       mInput.placeholder = "Minutes";
       mInput.id = "taskTime" + (numSubTasks.toString(10)-1);
 
+      tasksContainer.appendChild(lineBreak);
       tasksContainer.appendChild(taskNameInput);
       tasksContainer.appendChild(mInput);
-      
-      // Append a line break 
-      tasksContainer.appendChild(document.createElement("br")); 
     }
 
     function importSubTask() {
@@ -201,7 +200,8 @@
   <p id="taskName"></p>
   <div id="tasksContainer" class="center_div">
     <input type="text" placeholder="Task name" id="taskName0">
-    <input type="number" placeholder="Minutes" id="taskTime0"><br>
+    <input type="number" placeholder="Minutes" id="taskTime0">
+
   </div>
     <button type="button" onclick="addTask()">Add Task</button>
   </div>
