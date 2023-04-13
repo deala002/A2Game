@@ -37,56 +37,80 @@
     var savedTime = 0;
     var originalTime = 0;
     var currentTime = 0;
-    var numSubTasks = 0;
+    var numSubTasks = 1;
+    var currentTask = 0;
+    var paused = false;
+    const taskNames = [];
+    const taskTimes = [];
 
     //Initate the start time of the timer
     function initiateCountdown() 
     {
-      var totalOffset = 0;
-      var mOffset = 0;
-      //Clear previously running timer
-      clearInterval(timerInterval);
+        //Clear previously running timer
+        clearInterval(timerInterval);
 
-      //Get current time to set as reference point
-      var startpoint = new Date().getTime();
+        //Get current time to set as reference point
+        var startpoint = new Date().getTime();
 
-      for(var i=0; i<numSubTasks; i++)
+      //Ignore values in textboxes if timer is paused
+      if(paused == true)
       {
-        //Get time to set to from input
-        var minutesInput = document.getElementById("taskTime" + i.toString(10));
-
-        if (minutesInput.value != "")
-        mOffset = minutesInput.value;
-      else
-        mOffset = '0';
-
-        //Clear textboxes on screen
-        minutesInput.value = "";
-
-        //Calculate total time based of hours minutes and seconds 
-        var totalOffset = totalOffset + JSON.parse(mOffset) * 60000;
+      paused = false;
+      timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
       }
+      else {
+        for(var i=0; i<numSubTasks; i++)
+        {
+          //Get time to set to from input
+          var minutesInput = document.getElementById("taskTime" + i.toString(10));
+          var taskInput = document.getElementById("taskName" + i.toString(10));
 
-      //Initate countdown function from specified time
-      if (totalOffset > 0) {
-        originalTime = totalOffset;
-        savedTime = totalOffset;
-        timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
-      }
-      else //Initiate countdown function from last set time if no time is specified
-        timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
+          taskTimes[i] = 0;
+
+          if(i!=0)
+          {
+            taskTimes[i] = taskTimes[i-1];
+          }
+
+          taskNames[i] = taskInput.value;
+
+          //Set time to 0 if none is specified
+          if (minutesInput.value != "")
+          taskTimes[i] += JSON.parse(minutesInput.value);
+          }
+
+          //Calculate total time based of hours minutes and seconds 
+          var totalOffset = taskTimes[numSubTasks-1] * 60000;
+
+        //Initate countdown function from specified time
+        if (totalOffset > 0) {
+          originalTime = totalOffset;
+          savedTime = totalOffset;
+          timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
+        }
+        else //Initiate countdown function from last set time if no time is specified
+          timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
+        
+          //Display first task name in textbox
+          var taskText = document.getElementById('taskName');
+          taskText.innerHTML = taskNames[0];
+        }
     }
 
-    function pauseCountdown() {
+    //Pause the countdown at current point
+    function pauseCountdown() 
+    {
       clearInterval(timerInterval);
-
       savedTime = currentTime;
+      paused = true;
     }
 
+    //Reset the countdown back to the originally specified time
     function resetCountdown() {
       clearInterval(timerInterval);
 
       savedTime = originalTime;
+      currentTask = 0;
 
       var startpoint = new Date().getTime();
       countDown(originalTime, startpoint);
@@ -99,8 +123,16 @@
 
       // Find the distance between now and reference date, adding in offset to count down from
       var distance = ((startpoint + offset) - now);
-
       currentTime = distance;
+
+      var elapsedTime = (originalTime/60000) - (currentTime/60000);
+
+      if(elapsedTime > taskTimes[currentTask])
+      {
+        currentTask++;
+        taskText = document.getElementById("taskName"); 
+        taskText.innerHTML = taskNames[currentTask];
+      }
 
       // Calculate hours, minutes and seconds
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -114,7 +146,9 @@
       // Notify user if countdown complete
       if (distance < 0) {
         clearInterval(timerInterval);
-        document.getElementById("counter").innerHTML = "COMPLETED";
+        document.getElementById("counter").innerHTML = "00:00:00";
+        taskText.innerHTML = "COMPLETE";
+
       }
     }
 
@@ -124,9 +158,6 @@
             
       // Retrieve the container tot add sub-tasks to
       var tasksContainer = document.getElementById("tasksContainer");
-
-      // Append a node with a random text
-      tasksContainer.appendChild(document.createTextNode("Sub task " + (numSubTasks) + " "));
       
       // Create two input elements
       var taskNameInput = document.createElement("input");
@@ -167,7 +198,11 @@
 <body>
   <h1>Meeting timer</h1>
   <p id="counter"></p>
-  <div id="tasksContainer" class="center_div"></div>
+  <p id="taskName"></p>
+  <div id="tasksContainer" class="center_div">
+    <input type="text" placeholder="Task name" id="taskName0">
+    <input type="number" placeholder="Minutes" id="taskTime0"><br>
+  </div>
     <button type="button" onclick="addTask()">Add Task</button>
   </div>
   <div class="center_div">
