@@ -179,8 +179,15 @@
       tasksContainer.appendChild(mInput);
     }
 
-    function importSubTask() {
-
+    function importSubTask(csvFile) 
+    {
+    let file = csvFile.files[0];
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function() 
+    {
+      console.log(reader.result);
+    }
     }
 
     function exportSubTask() {
@@ -210,6 +217,9 @@
       <button type="button" onclick="initiateCountdown()">Start</button>
       <button type="button" onclick="pauseCountdown()">Pause</button>
       <button type="button" onclick="resetCountdown()">Reset</button>
+      <form>
+        <input onchange="importSubTask(this)" type="file" id="csv-file-input" accept=".csv">
+      </form>      
     </form>
   </div>
 </body>
