@@ -253,9 +253,8 @@
         lineBreak.remove();
     }
 
-    function exportSubTask() 
+    function exportSubTasks() 
     {
-
     }
 
     function pauseSubTask() 
@@ -284,6 +283,7 @@
       <button type="button" onclick="resetCountdown()">Reset</button>
       <form>
         <input onchange="importSubTask(this)" type="file" id="csv-file-input" accept=".csv">
+        <button type="button" onclick="exportSubTasks()">Export Tasks</button>
       </form>      
     </form>
   </div>
