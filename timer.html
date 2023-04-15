@@ -190,28 +190,10 @@
       //Remove all previously added tasks
       for(var i=0; i<numSubTasks; i++)
       {
-        currentTaskName = document.getElementById("taskName" + i);
-        currentTaskTime = document.getElementById("taskTime" + i);
-        lineBreak = document.getElementById("break" + i);
-        
-        if(currentTaskName != null)
-        {
-        currentTaskName.remove();
-        console.log("Removed name" + i);
-        }
-
-        if(currentTaskTime != null)
-        {
-        currentTaskTime.remove();
-        console.log("Removed time" + i);
-        }
-        
-        if(lineBreak != null)
-        lineBreak.remove();
-
-        console.log("Task count: " + numSubTasks);
+       removeSubTask(i);
       }
 
+      //Reset subTask count to 0
       numSubTasks = 0;
 
       //Read data in csv file
@@ -232,16 +214,43 @@
         console.log(dataByRow);
         var taskDetails = dataByRow[r].split(',');
 
+        if(taskDetails[0] == "")
+        {
+          taskDetails[0] = "Unamed task"
+        }
+
         //Catch error if an empty time is given
         try{
           addTask(taskDetails[0], JSON.parse(taskDetails[1]));
         }
         catch(syntaxError){
-          console.log("CAUGHT: Empty line in CSV");
+          console.log("CAUGHT: Empty time in CSV");
         }
       }
       console.log("NumSubTasks: " + numSubTasks);
     }
+    }
+
+    function removeSubTask(number)
+    {
+        currentTaskName = document.getElementById("taskName" + number);
+        currentTaskTime = document.getElementById("taskTime" + number);
+        lineBreak = document.getElementById("break" + number);
+        
+        if(currentTaskName != null)
+        {
+        currentTaskName.remove();
+        console.log("Removed name" + number);
+        }
+
+        if(currentTaskTime != null)
+        {
+        currentTaskTime.remove();
+        console.log("Removed time" + number);
+        }
+        
+        if(lineBreak != null)
+        lineBreak.remove();
     }
 
     function exportSubTask() 
