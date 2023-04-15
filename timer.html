@@ -195,25 +195,32 @@
         lineBreak = document.getElementById("break" + i);
         
         if(currentTaskName != null)
+        {
         currentTaskName.remove();
+        console.log("Removed name" + i);
+        }
 
         if(currentTaskTime != null)
+        {
         currentTaskTime.remove();
+        console.log("Removed time" + i);
+        }
         
         if(lineBreak != null)
         lineBreak.remove();
 
-        //Update subtasks counter
-        numSubTasks--;
+        console.log("Task count: " + numSubTasks);
       }
 
-      //Read data in csv file
-    let file = csvFile.files[0];
-    var reader = new FileReader();
-    reader.readAsText(file);
+      numSubTasks = 0;
 
-    reader.onload = function(event) 
-    {
+      //Read data in csv file
+      let file = csvFile.files[0];
+      var reader = new FileReader();
+      reader.readAsText(file);
+
+      reader.onload = function(event) 
+      {
       var taskData = event.target.result;
 
       //Split data by each line
@@ -230,11 +237,10 @@
           addTask(taskDetails[0], JSON.parse(taskDetails[1]));
         }
         catch(syntaxError){
-          numSubTasks--;
           console.log("CAUGHT: Empty line in CSV");
-          addTask(taskDetails[0], 0);
         }
       }
+      console.log("NumSubTasks: " + numSubTasks);
     }
     }
 
