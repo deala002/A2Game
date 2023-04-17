@@ -175,17 +175,15 @@
     {
       if(currentTask < taskTimes.length)
       {
-
-      console.log(currentTask+1);
-      console.log(taskNames[currentTask+1]);
-      console.log((taskTimes[numSubTasks-1] - taskTimes[currentTask]) * 60000);
-
       
+      //Update total time to the time the next task starts at
       currentTime = (taskTimes[numSubTasks-1] - taskTimes[currentTask]) * 60000;
-
       savedTime = currentTime;
-      paused = true;
 
+      /*  Set paused to true and run initiate countdown
+          to run countdown from updated time
+      */
+      paused = true;
       initiateCountdown();
       }
     }
