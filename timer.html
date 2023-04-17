@@ -122,7 +122,7 @@
       if (distance < 0) {
         clearInterval(timerInterval);
         document.getElementById("counter").innerHTML = "00:00:00";
-        taskText.innerHTML = "COMPLETE";
+        document.getElementById("taskName").innerHTML = "COMPLETE";
 
       }
     }
@@ -170,6 +170,26 @@
       
     }
 
+    //Skip the current subtask
+    function skipTask()
+    {
+      if(currentTask < taskTimes.length)
+      {
+
+      console.log(currentTask+1);
+      console.log(taskNames[currentTask+1]);
+      console.log((taskTimes[numSubTasks-1] - taskTimes[currentTask]) * 60000);
+
+      
+      currentTime = (taskTimes[numSubTasks-1] - taskTimes[currentTask]) * 60000;
+
+      savedTime = currentTime;
+      paused = true;
+
+      initiateCountdown();
+      }
+    }
+
   </script>
 </head>
 
@@ -191,6 +211,7 @@
       <button type="button" onclick="initiateCountdown()">Start</button>
       <button type="button" onclick="pauseCountdown()">Pause</button>
       <button type="button" onclick="resetCountdown()">Reset</button>
+      <button type="button" onclick="skipTask()">Skip</button>
     </form>
   </div>
 </body>
