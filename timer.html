@@ -14,7 +14,7 @@
     var savedTime = 0;
     var originalTime = 0;
     var currentTime = 0;
-    var numSubTasks = 1;
+    var numSubTasks = 0;
     var currentTask = 0;
 
     var paused = false;
@@ -167,6 +167,7 @@
     function addTask(name, time) {
       var audio = new Audio('mouse-click.mp3');
       audio.play();
+
       numSubTasks++;
 
       // Retrieve the container tot add sub-tasks to
@@ -194,26 +195,31 @@
       mInput.value = time;
 
       //Unhide button once task is added
-      if(numSubTasks = 1)
+      if(numSubTasks == 1)
       {
       document.getElementById("playPauseButton").hidden = false;
       document.getElementById("resetButton").hidden = false;
       document.getElementById("skipButton").hidden = false;
       document.getElementById("addMinuteButton").hidden = false;
+      document.getElementById("removeTaskButton").hidden = false;
       }
 
       tasksContainer.appendChild(lineBreak);
       tasksContainer.appendChild(taskNameInput);
       tasksContainer.appendChild(mInput);
 
+      console.log(numSubTasks);
+
       displayStatusText("TASK ADDED", 1);
     }
 
     //import subtasks from a csv file
     function importSubTask(csvFile) {
+      var originalNumSubTasks = numSubTasks;
+
       //Remove all previously added tasks
-      for (var i = 0; i < numSubTasks; i++) {
-        removeSubTask(i);
+      for (var i = 0; i < originalNumSubTasks; i++) {
+        removeTask(i);
       }
 
       //Reset subTask count to 0
@@ -250,7 +256,7 @@
     }
     }
 
-    function removeSubTask(number) {
+    function removeTask(number) {
       var audio = new Audio('mouse-click.mp3');
       audio.play();
       currentTaskName = document.getElementById("taskName" + number);
@@ -259,16 +265,25 @@
 
       if (currentTaskName != null) {
         currentTaskName.remove();
-        console.log("Removed name" + number);
       }
 
       if (currentTaskTime != null) {
         currentTaskTime.remove();
-        console.log("Removed time" + number);
       }
 
       if (lineBreak != null)
         lineBreak.remove();
+
+      numSubTasks--;
+
+      if(numSubTasks == 0)
+      {
+      document.getElementById("playPauseButton").hidden = true;
+      document.getElementById("resetButton").hidden = true;
+      document.getElementById("skipButton").hidden = true;
+      document.getElementById("addMinuteButton").hidden = true;
+      document.getElementById("removeTaskButton").hidden = true;
+      }
 
         displayStatusText("TASK REMOVED", 1);
     }
@@ -377,8 +392,6 @@
   <div id="tasksContainer" class="center_div">
     <div><button type="button" onclick="addTask('', 0)" id="addTaskButton">Add Task</button></div>
     <br>
-    <input type="text" placeholder="Task name" id="taskName0">
-    <input type="number" placeholder="Minutes" id="taskTime0" value="0">
   </div>
 
   </div>
@@ -389,6 +402,7 @@
       <button type="button" onclick="resetCountdown()" id="resetButton" hidden>Reset</button>
       <button type="button" onclick="skipTask()" id="skipButton" hidden>Skip</button>
       <button type="button" onclick="extendTask(1)" id="addMinuteButton" hidden>+ 1 min</button>
+      <button type="button" onclick="removeTask(numSubTasks-1)" id="removeTaskButton" hidden>Remove Task</button>
       <form>
         <input onchange="importSubTask(this)" type="file" id="csv-file-input" accept=".csv">
         <button type="button" onclick="exportSubTasks()">Export Tasks</button>
