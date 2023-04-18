@@ -8,6 +8,7 @@
 
   <script>
 
+    var stopwatchTime = 0;
     var timerInterval = setInterval(null, 0);
     var savedTime = 0;
     var originalTime = 0;
@@ -108,6 +109,7 @@
       currentTime = distance;
 
       var elapsedTime = (originalTime/60000) - (currentTime/60000);
+      var elapsedStopwatchTime = (now - startpoint) + (stopwatchTime);
 
       if(elapsedTime > taskTimes[currentTask])
       {
@@ -133,6 +135,7 @@
         document.getElementById("counter").innerHTML = "00:00:00";
         document.getElementById("taskName").innerHTML = "COMPLETE";
       }
+      updateStopwatch(elapsedStopwatchTime)
     }
 
     function addTask(name, time)
@@ -306,12 +309,27 @@
       initiateCountdown();
     }
 
+    function updateStopwatch(elapsedTime)
+    {
+
+      var elapsedTimeDisplay = document.getElementById("elapsedTime");
+      var eHours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var eMinutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+      var eSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+
+      elapsedTimeDisplay.innerHTML = eHours + ":"
+        + eMinutes + ":" + eSeconds;
+    }
+
   </script>
 </head>
 
 <body>
   <h1>Meeting timer</h1>
   <p id="counter">00:00:00</p>
+  <p id="taskName">No task</p>
+  <h1>Stopwatch</h1>
+  <p id="elapsedTime">00:00:00</p>
   <p id="taskName">No task</p>
   <div id="tasksContainer" class="center_div">
     <input type="text" placeholder="Task name" id="taskName0">
