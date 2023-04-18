@@ -23,7 +23,8 @@
     const taskTimes = [];
 
     //Initate the start time of the timer
-    function initiateCountdown() {
+    function initiateCountdown() 
+    {
       var audio = new Audio('mouse-click.mp3');
       audio.play();
 
@@ -70,18 +71,26 @@
           originalTime = totalOffset;
           savedTime = totalOffset;
           timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
-        }
-        else //Initiate countdown function from last set time if no time is specified
-          timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
 
         //Display first task name in textbox
         var taskText = document.getElementById('taskName');
         taskText.innerHTML = taskNames[currentTask];
+        }
+        else //Initiate countdown function from last set time if no time is specified
+        {
+          displayStatusText("No time entered!", 3);
+
+          //Change button to 'start'
+          var mainButton = document.getElementById("playPauseButton")
+          mainButton.innerHTML = "Start";
+          mainButton.onclick = function () {initiateCountdown()};
+        }
       }
     }
 
     //Pause the countdown at current point
-    function pauseCountdown() {
+    function pauseCountdown()
+    {
       var audio = new Audio('mouse-click.mp3');
       audio.play();
       clearInterval(timerInterval);
@@ -110,6 +119,7 @@
       var startpoint = new Date().getTime();
       countDown(originalTime, startpoint);
 
+      //Change button to 'start'
       var mainButton = document.getElementById("playPauseButton")
       mainButton.innerHTML = "Start";
       mainButton.onclick = function () {initiateCountdown()};
@@ -256,7 +266,8 @@
     }
     }
 
-    function removeTask(number) {
+    function removeTask(number) 
+    {
       var audio = new Audio('mouse-click.mp3');
       audio.play();
       currentTaskName = document.getElementById("taskName" + number);
@@ -371,6 +382,7 @@
 
     function displayStatusText(text, seconds)
     {
+      clearInterval(statusDisplay);
       document.getElementById("statusText").innerHTML = text;
       statusDisplay = setInterval(function () { clearText(text) }, seconds*1000);
     }
@@ -390,26 +402,26 @@
   <h3 id="taskName">No task</h3>
   <h2 id="statusText">-</h2>
   <div id="tasksContainer" class="center_div">
-    <div><button type="button" onclick="addTask('', 0)" id="addTaskButton">Add Task</button></div>
+    <div>
+      <button type="button" onclick="addTask('', 0)" id="addTaskButton">Add Task</button>
+      <input onchange="importSubTask(this)" type="file" id="csv-file-input" accept=".csv">
+    </div>
     <br>
   </div>
 
   </div>
   <br>
-  <div class="center_div">
-    <form>
+    <div>
       <button type="button" onclick="initiateCountdown()" id="playPauseButton" hidden>Start</button>
       <button type="button" onclick="resetCountdown()" id="resetButton" hidden>Reset</button>
       <button type="button" onclick="skipTask()" id="skipButton" hidden>Skip</button>
       <button type="button" onclick="extendTask(1)" id="addMinuteButton" hidden>+ 1 min</button>
-      <button type="button" onclick="removeTask(numSubTasks-1)" id="removeTaskButton" hidden>Remove Task</button>
-      <form>
-        <input onchange="importSubTask(this)" type="file" id="csv-file-input" accept=".csv">
+    </div>
+    <br>
+    <div>
         <button type="button" onclick="exportSubTasks()">Export Tasks</button>
-      </form>
-    </form>
-  </div>
-
+        <button type="button" onclick="removeTask(numSubTasks-1)" id="removeTaskButton" hidden>Remove Task</button>
+    </div>
 </body>
 
 </html>
