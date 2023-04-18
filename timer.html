@@ -255,6 +255,25 @@
 
     function exportSubTasks() 
     {
+      //Create a new variable to store the csv data
+      var csvData = "Task name,task time\n";
+
+      //Loop through subTasks and add name and time of each one to csvData seperated by commas
+      for(var i=0; i<numSubTasks; i++)
+      {
+        currentTaskName = document.getElementById("taskName" + i).value;
+        currentTaskTime = document.getElementById("taskTime" + i).value;
+        csvData += currentTaskName + "," + currentTaskTime+"\n";
+      }
+
+      //Download the data
+      var csvFile = document.createElement('a');
+      csvFile.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
+      csvFile.target = '_blank';
+
+      //Default name for the csv file is 'task data.csv'
+      csvFile.download = 'Task data.csv';
+      csvFile.click();
     }
 
     function pauseSubTask() 
