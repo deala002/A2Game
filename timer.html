@@ -58,7 +58,7 @@
           taskNames[i] = taskInput.value;
 
           //Set time to 0 if none is specified
-          if (minutesInput.value != "" && minutesInput.className != "task-complete")
+          if (minutesInput.value != "" && minutesInput.className != "taskTime-complete")
             taskTimes[i] += JSON.parse(minutesInput.value);
         }
 
@@ -76,7 +76,7 @@
 
         //Display first task name in textbox
         var taskText = document.getElementById('taskName');
-        taskText.innerHTML = taskNames[0];
+        taskText.innerHTML = taskNames[currentTask];
       }
     }
 
@@ -100,8 +100,8 @@
       clearInterval(timerInterval);
 
       for (var i = 0; i < numSubTasks; i++) {
-        var currentTime = document.getElementById("taskTime" + i);
-        currentTime.className = "task-not-started";
+        document.getElementById("taskName" + i).className = "taskName-not-started";
+        document.getElementById("taskTime" + i).className = "taskTime-not-started";
       }
 
       savedTime = originalTime;
@@ -130,7 +130,8 @@
       //Mark a task as complete if it finished
       if(elapsedTime > taskTimes[currentTask])
       {
-        document.getElementById("taskTime" + currentTask).className="task-complete";
+        document.getElementById("taskTime" + currentTask).className="taskTime-complete";
+        document.getElementById("taskName" + currentTask).className="taskName-complete";
 
         currentTask++;
         var taskText = document.getElementById("taskName");
@@ -161,6 +162,8 @@
       updateStopwatch(elapsedStopwatchTime)
     }
 
+
+    //Add another subtask
     function addTask(name, time) {
       var audio = new Audio('mouse-click.mp3');
       audio.play();
@@ -173,6 +176,7 @@
       var lineBreak = document.createElement("br");
       var taskNameInput = document.createElement("input");
       var mInput = document.createElement("input");
+      var taskAdd = document.createElement("button");
 
       //set id of linebreak
       lineBreak.id = "break" + (numSubTasks.toString(10) - 1);
@@ -188,6 +192,15 @@
       mInput.placeholder = "Minutes";
       mInput.id = "taskTime" + (numSubTasks.toString(10) - 1);
       mInput.value = time;
+
+      //Unhide button once task is added
+      if(numSubTasks = 1)
+      {
+      document.getElementById("playPauseButton").hidden = false;
+      document.getElementById("resetButton").hidden = false;
+      document.getElementById("skipButton").hidden = false;
+      document.getElementById("addMinuteButton").hidden = false;
+      }
 
       tasksContainer.appendChild(lineBreak);
       tasksContainer.appendChild(taskNameInput);
@@ -343,7 +356,6 @@
 
     function displayStatusText(text, seconds)
     {
-      clearInterval(statusDisplay);
       document.getElementById("statusText").innerHTML = text;
       statusDisplay = setInterval(function () { clearText(text) }, seconds*1000);
     }
@@ -351,30 +363,32 @@
     function clearText(text)
     {
       document.getElementById("statusText").innerHTML = "-";
+      clearInterval(statusDisplay);
     }
   </script>
 </head>
 
 <body>
   <h1>Meeting timer</h1>
-  <p id="counter">00:00:00</p>
-  <p id="taskName">No task</p>
-  <p id="statusText">-</p>
-  <h1>Stopwatch</h1>
+  <h2 id="counter">00:00:00</h2>
   <p id="elapsedTime">00:00:00</p>
+  <h3 id="taskName">No task</h3>
+  <h2 id="statusText">-</h2>
   <div id="tasksContainer" class="center_div">
+    <div><button type="button" onclick="addTask('', 0)" id="addTaskButton">Add Task</button></div>
+    <br>
     <input type="text" placeholder="Task name" id="taskName0">
     <input type="number" placeholder="Minutes" id="taskTime0" value="0">
+  </div>
 
   </div>
-  <button type="button" onclick="addTask('', 0)">Add Task</button>
-  </div>
+  <br>
   <div class="center_div">
     <form>
-      <button type="button" onclick="initiateCountdown()" id="playPauseButton">Start</button>
-      <button type="button" onclick="resetCountdown()">Reset</button>
-      <button type="button" onclick="skipTask()">Skip</button>
-      <button type="button" onclick="extendTask(1)">+ 1 min</button>
+      <button type="button" onclick="initiateCountdown()" id="playPauseButton" hidden>Start</button>
+      <button type="button" onclick="resetCountdown()" id="resetButton" hidden>Reset</button>
+      <button type="button" onclick="skipTask()" id="skipButton" hidden>Skip</button>
+      <button type="button" onclick="extendTask(1)" id="addMinuteButton" hidden>+ 1 min</button>
       <form>
         <input onchange="importSubTask(this)" type="file" id="csv-file-input" accept=".csv">
         <button type="button" onclick="exportSubTasks()">Export Tasks</button>
