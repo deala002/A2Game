@@ -16,6 +16,7 @@
     var currentTime = 0;
     var numSubTasks = 1;
     var currentTask = 0;
+
     var paused = false;
 
     const taskNames = [];
@@ -25,8 +26,13 @@
     function initiateCountdown() {
       var audio = new Audio('mouse-click.mp3');
       audio.play();
+
       //Clear previously running timer
       clearInterval(timerInterval);
+
+      //Change play button to pause button
+      document.getElementById("playPauseButton").innerHTML = "Pause";
+      document.getElementById("playPauseButton").onclick = function () {pauseCountdown()};
 
       //Get current time to set as reference point
       var startpoint = new Date().getTime();
@@ -81,6 +87,10 @@
       clearInterval(timerInterval);
       savedTime = currentTime;
       paused = true;
+
+      var mainButton = document.getElementById("playPauseButton")
+      mainButton.innerHTML = "Start";
+      mainButton.onclick = function () {initiateCountdown()};
     }
 
     //Reset the countdown back to the originally specified time
@@ -99,12 +109,14 @@
 
       var startpoint = new Date().getTime();
       countDown(originalTime, startpoint);
+
+      var mainButton = document.getElementById("playPauseButton")
+      mainButton.innerHTML = "Start";
+      mainButton.onclick = function () {initiateCountdown()};
     }
 
     // Update count down each second
     function countDown(offset, startpoint) {
-      var audio = new Audio('mouse-click.mp3');
-      audio.play();
       // Update date and time to reference against original time
       var now = new Date().getTime();
 
@@ -340,7 +352,6 @@
     {
       document.getElementById("statusText").innerHTML = "-";
     }
-
   </script>
 </head>
 
@@ -353,15 +364,14 @@
   <p id="elapsedTime">00:00:00</p>
   <div id="tasksContainer" class="center_div">
     <input type="text" placeholder="Task name" id="taskName0">
-    <input type="number" placeholder="Minutes" id="taskTime0">
+    <input type="number" placeholder="Minutes" id="taskTime0" value="0">
 
   </div>
   <button type="button" onclick="addTask('', 0)">Add Task</button>
   </div>
   <div class="center_div">
     <form>
-      <button type="button" onclick="initiateCountdown()">Start</button>
-      <button type="button" onclick="pauseCountdown()">Pause</button>
+      <button type="button" onclick="initiateCountdown()" id="playPauseButton">Start</button>
       <button type="button" onclick="resetCountdown()">Reset</button>
       <button type="button" onclick="skipTask()">Skip</button>
       <button type="button" onclick="extendTask(1)">+ 1 min</button>
