@@ -1,0 +1,10 @@
+taskname,tasktime,,//Title line
+D,0.1,,//Test standard tasks work
+B,0.2,,
+C,0.3,,
+ANOTHER TASK VERY BIG,0.05,,//Test caps lock and run on name works
+,0.1,,"//Test task  that has no name but does have a time (should be added as ""unamed task, 0.01)"
+Task with no time,,,//Test task that has no time but does have a name (Should not be added)
+,,what is this?,//Test task with writing outside of column scope (Should not be added)
+,,,//Test completely blank task (Should not be added)
+what ,is,this?,//Test task with text in time column (Should not be added)
