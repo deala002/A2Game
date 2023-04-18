@@ -113,6 +113,7 @@
       var elapsedTime = (originalTime/60000) - (currentTime/60000);
       var elapsedStopwatchTime = (now - startpoint) + (stopwatchTime);
 
+      //Mark a task as complete if it finished
       if(elapsedTime > taskTimes[currentTask])
       {
         document.getElementById("taskTime" + currentTask).className="task-complete";
@@ -120,6 +121,9 @@
         currentTask++;
         var taskText = document.getElementById("taskName"); 
         taskText.innerHTML = taskNames[currentTask];
+
+        if(document.getElementById("statusText").innerHTML == "-")
+        displayStatusText("TASK COMPLETE", 1);
       }
 
       // Calculate hours, minutes and seconds
@@ -138,6 +142,8 @@
         document.getElementById("taskName").innerHTML = "-";
         displayStatusText("COMPLETE", 3);
       }
+
+      //Update the stopwatch time
       updateStopwatch(elapsedStopwatchTime)
     }
 
