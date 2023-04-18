@@ -10,12 +10,14 @@
 
     var stopwatchTime = 0;
     var timerInterval = setInterval(null, 0);
+    var statusDisplay;
     var savedTime = 0;
     var originalTime = 0;
     var currentTime = 0;
     var numSubTasks = 1;
     var currentTask = 0;
     var paused = false;
+
     const taskNames = [];
     const taskTimes = [];
 
@@ -133,7 +135,8 @@
       if (distance < 0) {
         clearInterval(timerInterval);
         document.getElementById("counter").innerHTML = "00:00:00";
-        document.getElementById("taskName").innerHTML = "COMPLETE";
+        document.getElementById("taskName").innerHTML = "-";
+        displayStatusText("COMPLETE", 3);
       }
       updateStopwatch(elapsedStopwatchTime)
     }
@@ -168,6 +171,8 @@
       tasksContainer.appendChild(lineBreak);
       tasksContainer.appendChild(taskNameInput);
       tasksContainer.appendChild(mInput);
+
+      displayStatusText("TASK ADDED", 1);
     }
 
     //import subtasks from a csv file
@@ -213,7 +218,6 @@
           console.log("CAUGHT: Empty time in CSV");
         }
       }
-      console.log("NumSubTasks: " + numSubTasks);
     }
     }
 
@@ -237,7 +241,8 @@
         
         if(lineBreak != null)
         lineBreak.remove();
-        
+
+        displayStatusText("TASK REMOVED", 1);
     }
 
     function exportSubTasks() 
@@ -261,6 +266,8 @@
       //Default name for the csv file is 'task data.csv'
       csvFile.download = 'Task data.csv';
       csvFile.click();
+
+      displayStatusText("TASKS SAVED", 5);
     }
 
     function pauseSubTask() 
@@ -285,6 +292,8 @@
       paused = true;
       initiateCountdown();
       }
+
+      displayStatusText("TASK SKIPPED", 1);
     }
 
     //Extend the current subTask
@@ -307,6 +316,8 @@
 
       //Run the countdown with the extra minute added to subtask
       initiateCountdown();
+
+      displayStatusText("TASK EXTENDED BY 1 MINUTE", 1);
     }
 
     function updateStopwatch(elapsedTime)
@@ -321,6 +332,18 @@
         + eMinutes + ":" + eSeconds;
     }
 
+    function displayStatusText(text, seconds)
+    {
+      clearInterval(statusDisplay);
+      document.getElementById("statusText").innerHTML = text;
+      statusDisplay = setInterval(function () { clearText(text) }, seconds*1000);
+    }
+
+    function clearText(text)
+    {
+      document.getElementById("statusText").innerHTML = "-";
+    }
+
   </script>
 </head>
 
@@ -328,6 +351,7 @@
   <h1>Meeting timer</h1>
   <p id="counter">00:00:00</p>
   <p id="taskName">No task</p>
+  <p id="statusText">-</p>
   <h1>Stopwatch</h1>
   <p id="elapsedTime">00:00:00</p>
   <div id="tasksContainer" class="center_div">
