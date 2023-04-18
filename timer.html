@@ -8,13 +8,16 @@
 
   <script>
 
+    var stopwatchTime = 0;
     var timerInterval = setInterval(null, 0);
+    var statusDisplay;
     var savedTime = 0;
     var originalTime = 0;
     var currentTime = 0;
     var numSubTasks = 1;
     var currentTask = 0;
     var paused = false;
+
     const taskNames = [];
     const taskTimes = [];
 
@@ -109,14 +112,20 @@
       var distance = ((startpoint + offset) - now);
       currentTime = distance;
 
-      var elapsedTime = (originalTime / 60000) - (currentTime / 60000);
+      var elapsedTime = (originalTime/60000) - (currentTime/60000);
+      var elapsedStopwatchTime = (now - startpoint) + (stopwatchTime);
 
-      if (elapsedTime > taskTimes[currentTask]) {
-        document.getElementById("taskTime" + currentTask).className = "task-complete";
+      //Mark a task as complete if it finished
+      if(elapsedTime > taskTimes[currentTask])
+      {
+        document.getElementById("taskTime" + currentTask).className="task-complete";
 
         currentTask++;
         var taskText = document.getElementById("taskName");
         taskText.innerHTML = taskNames[currentTask];
+
+        if(document.getElementById("statusText").innerHTML == "-")
+        displayStatusText("TASK COMPLETE", 1);
       }
 
       // Calculate hours, minutes and seconds
@@ -132,8 +141,12 @@
       if (distance < 0) {
         clearInterval(timerInterval);
         document.getElementById("counter").innerHTML = "00:00:00";
-        document.getElementById("taskName").innerHTML = "COMPLETE";
+        document.getElementById("taskName").innerHTML = "-";
+        displayStatusText("COMPLETE", 3);
       }
+
+      //Update the stopwatch time
+      updateStopwatch(elapsedStopwatchTime)
     }
 
     function addTask(name, time) {
@@ -167,6 +180,8 @@
       tasksContainer.appendChild(lineBreak);
       tasksContainer.appendChild(taskNameInput);
       tasksContainer.appendChild(mInput);
+
+      displayStatusText("TASK ADDED", 1);
     }
 
     //import subtasks from a csv file
@@ -199,16 +214,15 @@
             taskDetails[0] = "Unamed task"
           }
 
-          //Catch error if an empty time is given
-          try {
-            addTask(taskDetails[0], JSON.parse(taskDetails[1]));
-          }
-          catch (syntaxError) {
-            console.log("CAUGHT: Empty time in CSV");
-          }
+        //Catch error if an empty time is given
+        try{
+          addTask(taskDetails[0], JSON.parse(taskDetails[1]));
         }
-        console.log("NumSubTasks: " + numSubTasks);
+        catch(syntaxError){
+          console.log("CAUGHT: Empty time in CSV");
+        }
       }
+    }
     }
 
     function removeSubTask(number) {
@@ -231,6 +245,7 @@
       if (lineBreak != null)
         lineBreak.remove();
 
+        displayStatusText("TASK REMOVED", 1);
     }
 
     function exportSubTasks() {
@@ -254,6 +269,8 @@
       //Default name for the csv file is 'task data.csv'
       csvFile.download = 'Task data.csv';
       csvFile.click();
+
+      displayStatusText("TASKS SAVED", 5);
     }
 
     function pauseSubTask() {
@@ -275,6 +292,8 @@
         paused = true;
         initiateCountdown();
       }
+
+      displayStatusText("TASK SKIPPED", 1);
     }
 
     //Extend the current subTask
@@ -294,6 +313,32 @@
 
       //Run the countdown with the extra minute added to subtask
       initiateCountdown();
+
+      displayStatusText("TASK EXTENDED BY 1 MINUTE", 1);
+    }
+
+    function updateStopwatch(elapsedTime)
+    {
+
+      var elapsedTimeDisplay = document.getElementById("elapsedTime");
+      var eHours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var eMinutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+      var eSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+
+      elapsedTimeDisplay.innerHTML = eHours + ":"
+        + eMinutes + ":" + eSeconds;
+    }
+
+    function displayStatusText(text, seconds)
+    {
+      clearInterval(statusDisplay);
+      document.getElementById("statusText").innerHTML = text;
+      statusDisplay = setInterval(function () { clearText(text) }, seconds*1000);
+    }
+
+    function clearText(text)
+    {
+      document.getElementById("statusText").innerHTML = "-";
     }
 
   </script>
@@ -303,6 +348,9 @@
   <h1>Meeting timer</h1>
   <p id="counter">00:00:00</p>
   <p id="taskName">No task</p>
+  <p id="statusText">-</p>
+  <h1>Stopwatch</h1>
+  <p id="elapsedTime">00:00:00</p>
   <div id="tasksContainer" class="center_div">
     <input type="text" placeholder="Task name" id="taskName0">
     <input type="number" placeholder="Minutes" id="taskTime0">
