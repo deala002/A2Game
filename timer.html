@@ -19,23 +19,22 @@
     const taskTimes = [];
 
     //Initate the start time of the timer
-    function initiateCountdown() 
-    {
-        //Clear previously running timer
-        clearInterval(timerInterval);
+    function initiateCountdown() {
+      var audio = new Audio('mouse-click.mp3');
+      audio.play();
+      //Clear previously running timer
+      clearInterval(timerInterval);
 
-        //Get current time to set as reference point
-        var startpoint = new Date().getTime();
+      //Get current time to set as reference point
+      var startpoint = new Date().getTime();
 
       //Ignore values in textboxes if timer is paused
-      if(paused == true)
-      {
-      paused = false;
-      timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
+      if (paused == true) {
+        paused = false;
+        timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
       }
       else {
-        for(var i=0; i<numSubTasks; i++)
-        {
+        for (var i = 0; i < numSubTasks; i++) {
 
           //Get time to set to from input
           var minutesInput = document.getElementById("taskTime" + i.toString(10));
@@ -43,39 +42,39 @@
 
           taskTimes[i] = 0;
 
-          if(i!=0)
-          {
-            taskTimes[i] = taskTimes[i-1];
+          if (i != 0) {
+            taskTimes[i] = taskTimes[i - 1];
           }
 
           taskNames[i] = taskInput.value;
 
           //Set time to 0 if none is specified
-          if (minutesInput.value != ""  && minutesInput.className != "task-complete")
-          taskTimes[i] += JSON.parse(minutesInput.value);
+          if (minutesInput.value != "" && minutesInput.className != "task-complete")
+            taskTimes[i] += JSON.parse(minutesInput.value);
         }
 
-          //Calculate total time based of hours minutes and seconds 
-          var totalOffset = taskTimes[numSubTasks-1] * 60000;
+        //Calculate total time based of hours minutes and seconds 
+        var totalOffset = taskTimes[numSubTasks - 1] * 60000;
 
-          //Initate countdown function from specified time
-          if (totalOffset > 0) {
-            originalTime = totalOffset;
-            savedTime = totalOffset;
-            timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
+        //Initate countdown function from specified time
+        if (totalOffset > 0) {
+          originalTime = totalOffset;
+          savedTime = totalOffset;
+          timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
         }
         else //Initiate countdown function from last set time if no time is specified
           timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
-        
-          //Display first task name in textbox
-          var taskText = document.getElementById('taskName');
-          taskText.innerHTML = taskNames[0];
-        }
+
+        //Display first task name in textbox
+        var taskText = document.getElementById('taskName');
+        taskText.innerHTML = taskNames[0];
+      }
     }
 
     //Pause the countdown at current point
-    function pauseCountdown() 
-    {
+    function pauseCountdown() {
+      var audio = new Audio('mouse-click.mp3');
+      audio.play();
       clearInterval(timerInterval);
       savedTime = currentTime;
       paused = true;
@@ -83,11 +82,12 @@
 
     //Reset the countdown back to the originally specified time
     function resetCountdown() {
+      var audio = new Audio('mouse-click.mp3');
+      audio.play();
       clearInterval(timerInterval);
 
-      for(var i=0; i<numSubTasks; i++)
-      {
-        var currentTime = document.getElementById("taskTime"+i);
+      for (var i = 0; i < numSubTasks; i++) {
+        var currentTime = document.getElementById("taskTime" + i);
         currentTime.className = "task-not-started";
       }
 
@@ -100,6 +100,8 @@
 
     // Update count down each second
     function countDown(offset, startpoint) {
+      var audio = new Audio('mouse-click.mp3');
+      audio.play();
       // Update date and time to reference against original time
       var now = new Date().getTime();
 
@@ -107,14 +109,13 @@
       var distance = ((startpoint + offset) - now);
       currentTime = distance;
 
-      var elapsedTime = (originalTime/60000) - (currentTime/60000);
+      var elapsedTime = (originalTime / 60000) - (currentTime / 60000);
 
-      if(elapsedTime > taskTimes[currentTask])
-      {
-        document.getElementById("taskTime" + currentTask).className="task-complete";
+      if (elapsedTime > taskTimes[currentTask]) {
+        document.getElementById("taskTime" + currentTask).className = "task-complete";
 
         currentTask++;
-        var taskText = document.getElementById("taskName"); 
+        var taskText = document.getElementById("taskName");
         taskText.innerHTML = taskNames[currentTask];
       }
 
@@ -135,31 +136,32 @@
       }
     }
 
-    function addTask(name, time)
-    {
+    function addTask(name, time) {
+      var audio = new Audio('mouse-click.mp3');
+      audio.play();
       numSubTasks++;
-            
+
       // Retrieve the container tot add sub-tasks to
       var tasksContainer = document.getElementById("tasksContainer");
-      
+
       // Create two input elements
       var lineBreak = document.createElement("br");
       var taskNameInput = document.createElement("input");
       var mInput = document.createElement("input");
 
       //set id of linebreak
-      lineBreak.id = "break"+ (numSubTasks.toString(10)-1);
+      lineBreak.id = "break" + (numSubTasks.toString(10) - 1);
 
       //Set type, placeholder and id of taskNameInput
       taskNameInput.type = "Text";
       taskNameInput.placeholder = "Task name";
-      taskNameInput.id = "taskName" + (numSubTasks.toString(10)-1);
+      taskNameInput.id = "taskName" + (numSubTasks.toString(10) - 1);
       taskNameInput.value = name;
 
       //Set type, placeholder and id of timer
       mInput.type = "number";
       mInput.placeholder = "Minutes";
-      mInput.id = "taskTime" + (numSubTasks.toString(10)-1);
+      mInput.id = "taskTime" + (numSubTasks.toString(10) - 1);
       mInput.value = time;
 
       tasksContainer.appendChild(lineBreak);
@@ -168,12 +170,10 @@
     }
 
     //import subtasks from a csv file
-    function importSubTask(csvFile) 
-    {
+    function importSubTask(csvFile) {
       //Remove all previously added tasks
-      for(var i=0; i<numSubTasks; i++)
-      {
-       removeSubTask(i);
+      for (var i = 0; i < numSubTasks; i++) {
+        removeSubTask(i);
       }
 
       //Reset subTask count to 0
@@ -184,70 +184,66 @@
       var reader = new FileReader();
       reader.readAsText(file);
 
-      reader.onload = function(event) 
-      {
-      var taskData = event.target.result;
+      reader.onload = function (event) {
+        var taskData = event.target.result;
 
-      //Split data by each line
-      var dataByRow = taskData.split('\n');
+        //Split data by each line
+        var dataByRow = taskData.split('\n');
 
-      //Split data in each line by commas
-      for(var r=1; r<dataByRow.length-1; r++)
-      {
-        console.log(dataByRow);
-        var taskDetails = dataByRow[r].split(',');
+        //Split data in each line by commas
+        for (var r = 1; r < dataByRow.length - 1; r++) {
+          console.log(dataByRow);
+          var taskDetails = dataByRow[r].split(',');
 
-        if(taskDetails[0] == "")
-        {
-          taskDetails[0] = "Unamed task"
+          if (taskDetails[0] == "") {
+            taskDetails[0] = "Unamed task"
+          }
+
+          //Catch error if an empty time is given
+          try {
+            addTask(taskDetails[0], JSON.parse(taskDetails[1]));
+          }
+          catch (syntaxError) {
+            console.log("CAUGHT: Empty time in CSV");
+          }
         }
-
-        //Catch error if an empty time is given
-        try{
-          addTask(taskDetails[0], JSON.parse(taskDetails[1]));
-        }
-        catch(syntaxError){
-          console.log("CAUGHT: Empty time in CSV");
-        }
+        console.log("NumSubTasks: " + numSubTasks);
       }
-      console.log("NumSubTasks: " + numSubTasks);
-    }
     }
 
-    function removeSubTask(number)
-    {
-        currentTaskName = document.getElementById("taskName" + number);
-        currentTaskTime = document.getElementById("taskTime" + number);
-        lineBreak = document.getElementById("break" + number);
-        
-        if(currentTaskName != null)
-        {
+    function removeSubTask(number) {
+      var audio = new Audio('mouse-click.mp3');
+      audio.play();
+      currentTaskName = document.getElementById("taskName" + number);
+      currentTaskTime = document.getElementById("taskTime" + number);
+      lineBreak = document.getElementById("break" + number);
+
+      if (currentTaskName != null) {
         currentTaskName.remove();
         console.log("Removed name" + number);
-        }
+      }
 
-        if(currentTaskTime != null)
-        {
+      if (currentTaskTime != null) {
         currentTaskTime.remove();
         console.log("Removed time" + number);
-        }
-        
-        if(lineBreak != null)
+      }
+
+      if (lineBreak != null)
         lineBreak.remove();
-        
+
     }
 
-    function exportSubTasks() 
-    {
+    function exportSubTasks() {
+      var audio = new Audio('mouse-click.mp3');
+      audio.play();
       //Create a new variable to store the csv data
       var csvData = "Task name,task time\n";
 
       //Loop through subTasks and add name and time of each one to csvData seperated by commas
-      for(var i=0; i<numSubTasks; i++)
-      {
+      for (var i = 0; i < numSubTasks; i++) {
         currentTaskName = document.getElementById("taskName" + i).value;
         currentTaskTime = document.getElementById("taskTime" + i).value;
-        csvData += currentTaskName + "," + currentTaskTime+"\n";
+        csvData += currentTaskName + "," + currentTaskTime + "\n";
       }
 
       //Download the data
@@ -260,47 +256,41 @@
       csvFile.click();
     }
 
-    function pauseSubTask() 
-    {
+    function pauseSubTask() {
 
     }
 
     //Skip the current subtask
-    function skipTask()
-    {
-      if(currentTask < taskTimes.length)
-      {
-      
-      //Update total time to the time the next task starts at
-      currentTime = (taskTimes[numSubTasks-1] - taskTimes[currentTask]) * 60000;
-      savedTime = currentTime;
+    function skipTask() {
+      if (currentTask < taskTimes.length) {
 
-      /*  
-        Set paused to true and run initiate countdown
-        to run countdown from updated time
-      */
-      paused = true;
-      initiateCountdown();
+        //Update total time to the time the next task starts at
+        currentTime = (taskTimes[numSubTasks - 1] - taskTimes[currentTask]) * 60000;
+        savedTime = currentTime;
+
+        /*  
+          Set paused to true and run initiate countdown
+          to run countdown from updated time
+        */
+        paused = true;
+        initiateCountdown();
       }
     }
 
     //Extend the current subTask
-    function extendTask(extendMinutes)
-    {
+    function extendTask(extendMinutes) {
       var currentTaskTime = 0;
 
-      if(currentTask == 0)
-      {
-      currentTaskTime = taskTimes[currentTask];
+      if (currentTask == 0) {
+        currentTaskTime = taskTimes[currentTask];
       }
-      else
-      {
-      currentTaskTime = taskTimes[currentTask] - taskTimes[currentTask-1];
+      else {
+        currentTaskTime = taskTimes[currentTask] - taskTimes[currentTask - 1];
       }
 
       console.log(currentTaskTime);
       //Update the value in the input for the currentSubtask
-      document.getElementById("taskTime" + currentTask).value = currentTaskTime+extendMinutes;
+      document.getElementById("taskTime" + currentTask).value = currentTaskTime + extendMinutes;
 
       //Run the countdown with the extra minute added to subtask
       initiateCountdown();
@@ -318,7 +308,7 @@
     <input type="number" placeholder="Minutes" id="taskTime0">
 
   </div>
-    <button type="button" onclick="addTask('', 0)">Add Task</button>
+  <button type="button" onclick="addTask('', 0)">Add Task</button>
   </div>
   <div class="center_div">
     <form>
@@ -330,9 +320,10 @@
       <form>
         <input onchange="importSubTask(this)" type="file" id="csv-file-input" accept=".csv">
         <button type="button" onclick="exportSubTasks()">Export Tasks</button>
-      </form>      
+      </form>
     </form>
   </div>
 
 </body>
+
 </html>
