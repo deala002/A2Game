@@ -25,7 +25,7 @@
     //Initate the start time of the timer
     function initiateCountdown() 
     {
-      var audio = new Audio('mouse-click.mp3');
+      var audio = new Audio('programFiles/mouse-click.mp3');
       audio.play();
 
       //Clear previously running timer
@@ -91,7 +91,7 @@
     //Pause the countdown at current point
     function pauseCountdown()
     {
-      var audio = new Audio('mouse-click.mp3');
+      var audio = new Audio('programFiles/mouse-click.mp3');
       audio.play();
       clearInterval(timerInterval);
       savedTime = currentTime;
@@ -104,7 +104,7 @@
 
     //Reset the countdown back to the originally specified time
     function resetCountdown() {
-      var audio = new Audio('mouse-click.mp3');
+      var audio = new Audio('programFiles/mouse-click.mp3');
       audio.play();
       clearInterval(timerInterval);
 
@@ -175,7 +175,7 @@
 
     //Add another subtask
     function addTask(name, time) {
-      var audio = new Audio('mouse-click.mp3');
+      var audio = new Audio('programFiles/mouse-click.mp3');
       audio.play();
 
       numSubTasks++;
@@ -268,7 +268,7 @@
 
     function removeTask(number) 
     {
-      var audio = new Audio('mouse-click.mp3');
+      var audio = new Audio('programFiles/mouse-click.mp3');
       audio.play();
       currentTaskName = document.getElementById("taskName" + number);
       currentTaskTime = document.getElementById("taskTime" + number);
@@ -300,7 +300,7 @@
     }
 
     function exportSubTasks() {
-      var audio = new Audio('mouse-click.mp3');
+      var audio = new Audio('programFiles/mouse-click.mp3');
       audio.play();
       //Create a new variable to store the csv data
       var csvData = "Task name,task time\n";
