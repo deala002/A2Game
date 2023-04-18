@@ -33,4 +33,14 @@ There is no limit (within reason) to the number of tasks that can be imported, a
 
 Once you open the .csv file, the program will automatically place the information from the .csv in the same format as above, and you are free to edit any names or times however you want.
 
-## Starting the timer
+### Running the timer
+
+Once a timer is added, the "Start" button runs the timer from its current point in time. It also acts as a "Pause" button, where you can freeze the timer.
+
+"Reset" sets the timer back to its built time limit in a frozen state to be able to run again. "Skip" will make the timer jump to the end time of a single task, and "+1 min" adds an additional minute to the timer.
+
+"Remove Task" will take out the newest task added to the agenda.
+
+### Imports and Exports
+
+Accepting the data in "csv" files, the program also allows users to take in and out arranged data for the timer. To save an agenda, press "Export Tasks". This will download a csv into your file directory. You can call back to this by selecting the file after pressing "Choose File".
