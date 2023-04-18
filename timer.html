@@ -36,6 +36,7 @@
       else {
         for(var i=0; i<numSubTasks; i++)
         {
+
           //Get time to set to from input
           var minutesInput = document.getElementById("taskTime" + i.toString(10));
           var taskInput = document.getElementById("taskName" + i.toString(10));
@@ -50,18 +51,18 @@
           taskNames[i] = taskInput.value;
 
           //Set time to 0 if none is specified
-          if (minutesInput.value != "")
+          if (minutesInput.value != ""  && minutesInput.className != "task-complete")
           taskTimes[i] += JSON.parse(minutesInput.value);
-          }
+        }
 
           //Calculate total time based of hours minutes and seconds 
           var totalOffset = taskTimes[numSubTasks-1] * 60000;
 
-        //Initate countdown function from specified time
-        if (totalOffset > 0) {
-          originalTime = totalOffset;
-          savedTime = totalOffset;
-          timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
+          //Initate countdown function from specified time
+          if (totalOffset > 0) {
+            originalTime = totalOffset;
+            savedTime = totalOffset;
+            timerInterval = setInterval(function () { countDown(totalOffset, startpoint) }, 100);
         }
         else //Initiate countdown function from last set time if no time is specified
           timerInterval = setInterval(function () { countDown(savedTime, startpoint) }, 100);
@@ -84,6 +85,12 @@
     function resetCountdown() {
       clearInterval(timerInterval);
 
+      for(var i=0; i<numSubTasks; i++)
+      {
+        var currentTime = document.getElementById("taskTime"+i);
+        currentTime.className = "task-not-started";
+      }
+
       savedTime = originalTime;
       currentTask = 0;
 
@@ -104,6 +111,8 @@
 
       if(elapsedTime > taskTimes[currentTask])
       {
+        document.getElementById("taskTime" + currentTask).className="task-complete";
+
         currentTask++;
         var taskText = document.getElementById("taskName"); 
         taskText.innerHTML = taskNames[currentTask];
@@ -123,7 +132,6 @@
         clearInterval(timerInterval);
         document.getElementById("counter").innerHTML = "00:00:00";
         document.getElementById("taskName").innerHTML = "COMPLETE";
-
       }
     }
 
@@ -180,12 +188,35 @@
       currentTime = (taskTimes[numSubTasks-1] - taskTimes[currentTask]) * 60000;
       savedTime = currentTime;
 
-      /*  Set paused to true and run initiate countdown
-          to run countdown from updated time
+      /*  
+        Set paused to true and run initiate countdown
+        to run countdown from updated time
       */
       paused = true;
       initiateCountdown();
       }
+    }
+
+    //Extend the current subTask
+    function extendTask(extendMinutes)
+    {
+      var currentTaskTime = 0;
+
+      if(currentTask == 0)
+      {
+      currentTaskTime = taskTimes[currentTask];
+      }
+      else
+      {
+      currentTaskTime = taskTimes[currentTask] - taskTimes[currentTask-1];
+      }
+
+      console.log(currentTaskTime);
+      //Update the value in the input for the currentSubtask
+      document.getElementById("taskTime" + currentTask).value = currentTaskTime+extendMinutes;
+
+      //Run the countdown with the extra minute added to subtask
+      initiateCountdown();
     }
 
   </script>
@@ -210,8 +241,10 @@
       <button type="button" onclick="pauseCountdown()">Pause</button>
       <button type="button" onclick="resetCountdown()">Reset</button>
       <button type="button" onclick="skipTask()">Skip</button>
+      <button type="button" onclick="extendTask(1)">+ 1 min</button>
     </form>
   </div>
+
 </body>
 
 </html>
