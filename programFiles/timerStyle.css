@@ -10,7 +10,7 @@ h1 {
     text-transform: uppercase;
     font-weight: 700;
     font-style: normal;
-    font-size: 70px;
+    font-size: 50px;
     line-height: 1.15;
     letter-spacing: -.02em;
     color: rgba(0, 33, 65, 0.8);
@@ -150,8 +150,8 @@ input::file-selector-button:hover{
 
     align-items: center;
 
-    height: 20em;
-    width: 20em;
+    height: 15em;
+    width: 15em;
 
     padding: 15px;
     margin: auto auto 50px auto;
