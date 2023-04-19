@@ -26,7 +26,7 @@
     //Initate the start time of the timer
     function initiateCountdown() 
     {
-      var audio = new Audio('programFiles/mouse-click.mp3');
+      var audio = new Audio('programFiles/sfx/startTimer.mp3');
       audio.play();
 
       //Clear previously running timer
@@ -92,7 +92,7 @@
     //Pause the countdown at current point
     function pauseCountdown()
     {
-      var audio = new Audio('programFiles/mouse-click.mp3');
+      var audio = new Audio('programFiles/sfx/pauseTimer.mp3');
       audio.play();
       clearInterval(timerInterval);
       savedTime = currentTime;
@@ -108,7 +108,7 @@
 
     //Reset the countdown back to the originally specified time
     function resetCountdown() {
-      var audio = new Audio('programFiles/mouse-click.mp3');
+      var audio = new Audio('programFiles/sfx/resetTimer.mp3');
       audio.play();
       clearInterval(timerInterval);
 
@@ -147,6 +147,9 @@
       //Mark a task as complete if it finished
       if(elapsedTime > taskTimes[currentTask])
       {
+        var audio = new Audio('programFiles/sfx/subtaskComplete.mp3');
+        audio.play();
+
         document.getElementById("taskTime" + currentTask).className="taskTime-complete";
         document.getElementById("taskName" + currentTask).className="taskName-complete";
 
@@ -169,6 +172,10 @@
 
       // Notify user if countdown complete
       if (distance < 0) {
+        //Play finish sound
+        var audio = new Audio('programFiles/sfx/allTasksComplete.mp3');
+        audio.play();
+
         clearInterval(timerInterval);
         document.getElementById("counter").innerHTML = "00:00:00";
         document.getElementById("taskName").innerHTML = "-";
@@ -182,7 +189,7 @@
 
     //Add another subtask
     function addTask(name, time) {
-      var audio = new Audio('programFiles/mouse-click.mp3');
+      var audio = new Audio('programFiles/sfx/mouse-click.mp3');
       audio.play();
 
       numSubTasks++;
@@ -272,7 +279,7 @@
 
     function removeTask(number) 
     {
-      var audio = new Audio('programFiles/mouse-click.mp3');
+      var audio = new Audio('programFiles/sfx/mouse-click.mp3');
       audio.play();
       currentTaskName = document.getElementById("taskName" + number);
       currentTaskTime = document.getElementById("taskTime" + number);
@@ -304,7 +311,7 @@
     }
 
     function exportSubTasks() {
-      var audio = new Audio('programFiles/mouse-click.mp3');
+      var audio = new Audio('programFiles/sfx/mouse-click.mp3');
       audio.play();
       //Create a new variable to store the csv data
       var csvData = "Task name,task time\n";
@@ -330,6 +337,9 @@
 
     //Skip the current subtask
     function skipTask() {
+      var audio = new Audio('programFiles/sfx/skipTask.mp3');
+      audio.play();
+      
       if (currentTask < taskTimes.length) {
 
         //Update total time to the time the next task starts at
@@ -353,6 +363,9 @@
 
     //Extend the current subTask
     function extendTask(extendMinutes) {
+
+      var audio = new Audio('programFiles/sfx/addMin.mp3');
+      audio.play();
       var currentTaskTime = 0;
 
       if (currentTask == 0) {
