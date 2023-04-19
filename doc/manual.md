@@ -9,12 +9,12 @@ The goal of this application is to keep your meeting (in person or online) on tr
 ## Setup
 1. Download the gitLab folder and unzpip all files.
 
-![Download the folder](doc/setup1.png)
+![Download the folder](doc/manualPhotos/setup1.png)
 
 2. Right click the **timer.html** file and click *'open with'*.
 3. Choose your preferred browser to run the timer in.
 
-![Run in browser](doc/setup2.png)
+![Run in browser](doc/manualPhotos/setup2.png)
 
 ## Usage
 
@@ -26,13 +26,13 @@ Tasks are the building blocks of everything in this application. There are 2 way
 
 This will add two input boxes to the screen next to each other, one titled **Task name**, which is where the name of the task should go, and the other with the number 0 inside, where the time allocated for the task (in minutes) should go.
 
-![Add task example](doc/addTaskExample.png)
+![Add task example](doc/manualPhotos/addTaskExample.png)
 
 **2. Press the *Choose File* button.**
 
 This will open your file explorer and enable you to open a **.csv** file to input your tasks. The .csv **must be in the format pictured below**, with one column for task names, and another for task times. The header row will not be included in the task import.
 
-![CSV Example](doc/CSVExample.png)
+![CSV Example](doc/manualPhotos/CSVExample.png)
 
 There is no limit (within reason) to the number of tasks that can be imported, as long as the file is a .csv and follows this format.
 
