@@ -18,6 +18,7 @@
     var currentTime = 0;
     var numSubTasks = 0;
     var currentTask = 0;
+    var elapsedTime = 0;
 
     var paused = false;
 
@@ -145,7 +146,7 @@
       var distance = (startpoint + offset) - now;
       currentTime = distance;
 
-      var elapsedTime = (originalTime/60000) - (currentTime/60000);
+      elapsedTime = (originalTime/60000) - (currentTime/60000);
       stopwatchTime = (now - startpoint) + stopwatchOffset;
 
       // Calculate the individual task time
@@ -379,14 +380,8 @@
       audio.play();
       var currentTaskTime = 0;
 
-      if (currentTask == 0) {
-        currentTaskTime = taskTimes[currentTask];
-      }
-      else {
-        currentTaskTime = taskTimes[currentTask] - taskTimes[currentTask - 1];
-      }
       //Update the value in the input for the currentSubtask
-      document.getElementById("taskTime" + currentTask).value = currentTaskTime + extendMinutes;
+      document.getElementById("taskTime" + currentTask).value = ((taskTimes[currentTask] + extendMinutes) - elapsedTime).toFixed(2);
 
       //Save current stopwatch time
       stopwatchOffset = stopwatchTime;
@@ -418,6 +413,17 @@
       var hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+
+      //Add 0 before number for nice formatting
+      if(minutes<10)
+      {
+        minutes = "0"+minutes.toString();
+      }
+      
+      if(seconds<10)
+      {
+        seconds = "0"+seconds.toString();
+      }
 
       return (hours + ":" + minutes + ":" + seconds);
     }
