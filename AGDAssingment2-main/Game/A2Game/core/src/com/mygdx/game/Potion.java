@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,6 +22,8 @@ public class Potion extends Interactable {
     public boolean checkCollision(Player player, Level level) {
         if (this.boundingBox.overlaps(player.getDeltaRectangle())) {
             player.heal(15);
+            Music music = Gdx.audio.newMusic(Gdx.files.internal("bottle-open-14895.mp3"));
+            music.play();
             return true;
         }
         return false;

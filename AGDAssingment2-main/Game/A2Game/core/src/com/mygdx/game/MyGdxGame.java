@@ -5,6 +5,7 @@ import static jdk.internal.org.jline.utils.Colors.h;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -51,7 +52,7 @@ public class MyGdxGame<MediaPlayer> extends ApplicationAdapter {
 
 	//Player instantiation
 	Player player;
-	MediaPlayer music;
+
 	//DT
 	float dt;
 
@@ -117,10 +118,11 @@ public class MyGdxGame<MediaPlayer> extends ApplicationAdapter {
 		moveDownButton = new Button(buttonSize, 0.0f, 100, 100, buttonTexture, buttonTexture);
 		moveUpButton = new Button(buttonSize, buttonSize*2, 100, 100, buttonTexture, buttonTexture);
 
-		if (music == null){
-			music = MediaPlayer.create("Caves_-_Super_Mario_Odyssey.mp3");
-		}
-		music.start();
+		//Music
+		Gdx gdx = null;
+		Music music = Gdx.audio.newMusic(Gdx.files.internal("Caves_-_Super_Mario_Odyssey.mp3"));
+		music.setLooping(true);
+		music.play();
 
 		//Player Sprite defined
 		/*player = new Player("player.png");
