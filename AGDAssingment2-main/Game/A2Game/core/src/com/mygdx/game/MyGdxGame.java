@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.LinkedList;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class MyGdxGame<MediaPlayer> extends ApplicationAdapter {
 	//movement speed
 	public static final float MOVEMENT_SPEED = 200.0f;
 
@@ -51,7 +51,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	//Player instantiation
 	Player player;
-
+	MediaPlayer music;
 	//DT
 	float dt;
 
@@ -117,6 +117,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		moveDownButton = new Button(buttonSize, 0.0f, 100, 100, buttonTexture, buttonTexture);
 		moveUpButton = new Button(buttonSize, buttonSize*2, 100, 100, buttonTexture, buttonTexture);
 
+		if (music == null){
+			music = MediaPlayer.create("Caves_-_Super_Mario_Odyssey.mp3");
+		}
+		music.start();
+
 		//Player Sprite defined
 		/*player = new Player("player.png");
 		playerSprite = player.sprite;
@@ -151,6 +156,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		player.setHealth(100);
 		player.setPlayerScore(0);
+
 	}
 
 	public void update () {
